@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -88,7 +89,13 @@ class UserResourceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenCreated() {
+        when(service.create(any())).thenReturn(user);
+
+        ResponseEntity<UserDTO> response = resource.create(userDTO);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
